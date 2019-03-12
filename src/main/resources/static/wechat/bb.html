@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>基本信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/vue-ydui/dist/ydui.rem.css">
+    <!-- 引入rem自适应类库 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/build/css/ydui.css?rev=a4b9d6e8c9c1cae7ea4676f911682af7"/>
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/demo/css/demo.css"/>
+    <script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.flexible.js"></script>
+    <script src="../resources/path/build/js/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        .cell-icon {
+            color: red;
+            margin-right: 0.1rem;
+        }
+        .cell-input {
+            text-align: center;
+        }
+        .cell-select {
+            text-align: center;
+            margin-left: 1.0rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<section class="g-flexview">
+
+    <header class="m-navbar">
+        <a href="personinfo.html" class="navbar-item"><i class="back-ico"></i></a>
+        <div class="navbar-center"><span class="navbar-title">基本信息</span></div>
+    </header>
+
+    <section class="g-scrollview" id="rrapp" v-cloak>
+        <div class="m-celltitle demo-small-pitch">系统已存在信息</div>
+        <form class="form-horizontal">
+            <div class="m-cell demo-small-pitch">
+                <div class="cell-item">
+                    <div class="cell-left">学号：</div>
+                    <div class="cell-right">
+                        <input type="text" v-model="shStudent.studentNo" class="cell-input" readonly autocomplete="off" />
+                    </div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">姓名：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.name" class="cell-input" readonly autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">姓名拼音：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.spellname" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">曾用名：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.usedname" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">性别：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.sex">
+                            <option v-for="option in sex" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">出生日期：</div>
+                    <div class="cell-right"><input type="date" v-model="shStudent.birthday" id="birthday" class="cell-input" value="2018-07-15" readonly="readonly" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">证件类型：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.certificateType">
+                            <option v-for="option in certificate_type" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">证件号：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.idCard" class="cell-input" readonly autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">一卡通号：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.metroCard" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left"><i class="cell-icon">*</i>手机卡号：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.mobileno" class="cell-input" autocomplete="off" required/></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">考生号：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.candidateNo" class="cell-input" autocomplete="off" readonly/></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">准考证号：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.ticketNo" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">生源地：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.localInstitution" class="cell-input" autocomplete="off" readonly /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">籍贯：</div>
+                    <div class="cell-right cell-arrow">
+                        <input type="text" id="nativePlace" v-model="shStudent.nativePlace" onclick="selectJg()" class="cell-input" readonly />
+                    </div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">入团时间：</div>
+                    <div class="cell-right">
+                        <input type="date" v-model="shStudent.leagueTime" id="leagueTime" class="cell-input" autocomplete="off" />
+                    </div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">入党时间：</div>
+                    <div class="cell-right"><input type="date" v-model="shStudent.partyTime" id="partyTime" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">婚姻状况：</div>
+                    <label class="cell-right cell-arrow" >
+                        <select class="cell-select" v-model="shStudent.maritalStatus">
+                            <option v-for="option in marital_status" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left"><i class="cell-icon">*</i>身高(cm)：</div>
+                    <div class="cell-right"><input type="number" v-model="shStudent.height" class="cell-input" autocomplete="off" required/></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left"><i class="cell-icon">*</i>体重(kg)：</div>
+                    <div class="cell-right"><input type="number" v-model="shStudent.weight" class="cell-input" autocomplete="off" required/></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">民族：</div>
+                    <label class="cell-right cell-arrow" >
+                        <select class="cell-select" v-model="shStudent.nation">
+                            <option v-for="option in nation" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">政治面貌：</div>
+                    <label class="cell-right cell-arrow" >
+                        <select class="cell-select" v-model="shStudent.politicalStatus">
+                            <option v-for="option in policital_status" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">来源国别：</div>
+                    <label class="cell-right cell-arrow" >
+                        <select class="cell-select" v-model="shStudent.sourceCountry">
+                            <option v-for="option in source_country" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">户口所在省：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.registeredProvince" id="province" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left"><i class="cell-icon">*</i>户口所在市：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.registeredCity" class="cell-input" autocomplete="off" required/></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left"><i class="cell-icon">*</i>户口所在县：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.registeredCounty" class="cell-input" autocomplete="off" required/></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">户口所在地：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.domicilePlace" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left"><i class="cell-icon">*</i>家庭所属街道（镇）：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.familyStreet" class="cell-input" autocomplete="off" required/></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">警署：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.townPoliceStation" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">本人住址所在省：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.addressProvince" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left"><i class="cell-icon">*</i>本人住址所在市：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.addressCity" class="cell-input" autocomplete="off" required/></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left"><i class="cell-icon">*</i>本人住址所在县：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.addressCounty" class="cell-input" autocomplete="off" required/></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">本人住址：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.address" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left"><i class="cell-icon">*</i>家庭特殊情况：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.specialFamilyCircumstances" class="cell-input" autocomplete="off" required/></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">是否知青子女：</div>
+                    <label class="cell-right">
+                        <input type="checkbox" class="m-switch-old" v-model="shStudent.educatedChildren" autocomplete="off"/>
+                        <span class="m-switch"></span>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">健康状况：</div>
+                    <label class="cell-right cell-arrow" >
+                        <select class="cell-select" v-model="shStudent.healthCondition">
+                            <option v-for="option in health_status" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">血型：</div>
+                    <label class="cell-right cell-arrow" >
+                        <select class="cell-select" v-model="shStudent.bloodType">
+                            <option v-for="option in blood_type" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">录取通知书邮递编号：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.postalCodes" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+
+                <div class="cell-item">
+                    <div class="cell-left">港澳台侨：</div>
+                    <label class="cell-right cell-arrow" >
+                        <select class="cell-select" v-model="shStudent.emigrantcode">
+                            <option v-for="option in gatq" v-bind:value="option.id" >{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="cell-item">
+                    <div class="cell-left"><i class="cell-icon">*</i>户口性质：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.householdRegistrationType">
+                            <option v-for="option in household" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">学籍号：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.studentStatus" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">学生类别：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.studentCategory">
+                            <option v-for="option in student_type" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">学生身份：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.studentIdentity">
+                            <option v-for="option in student_identity" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">院系：  </div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.department">
+                            <option v-for="option in department" v-bind:value="option.id" title="">{{ option.name.substring(0, 15) }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">年级：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.grade" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">专业：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.profession">
+                            <option v-for="option in profession" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">班级：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.stuClass">
+                            <option v-for="option in clazz" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+
+                <div class="cell-item">
+                    <div class="cell-left">开户银行1：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.bankAccountF" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">银行卡号1：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.bankCard" class="cell-input" autocomplete="off" /></div>
+                </div>
+                <div class="cell-item">
+                    <div class="cell-left">开户银行2：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.bankAccountS" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">银行卡号2：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.bankAccount" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">报考省市：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.bkss" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">入学前单位：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.rxqdw" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">入学日期：</div>
+                    <div class="cell-right"><input type="date" v-model="shStudent.rxrq" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">入学年级：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.rxnj" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">入学院系：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.rxyx">
+                            <option v-for="option in department" v-bind:value="option.id">{{ option.name.substring(0, 15) }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">入学专业：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.rxzy">
+                            <option v-for="option in profession" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">入学方式：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.rxfs">
+                            <option v-for="option in enrolment" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">培养方式：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.pyfs">
+                            <option v-for="option in cultivation_mode" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">学生来源：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.xsly" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">校区：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.xq">
+                            <option v-for="option in campus" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">就读学位：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.jdxw">
+                            <option v-for="option in degree" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">就读学历：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.jdxl">
+                            <option v-for="option in academic" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">学制：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.xz" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">预计毕业年份：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.yjbynf" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">实际毕业时间：</div>
+                    <div class="cell-right"><input type="date" v-model="shStudent.sjbysj" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">手机号2：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.mobile" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">注册学年：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.zcxn">
+                            <option v-for="option in registered_school_year" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">注册学期：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.zcxq">
+                            <option v-for="option in semester" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">在校：</div>
+                    <label class="cell-right">
+                        <input type="checkbox" class="m-switch-old" v-model="shStudent.zx" autocomplete="off"/>
+                        <span class="m-switch"></span>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">再籍：</div>
+                    <label class="cell-right">
+                        <input type="checkbox" class="m-switch-old" v-model="shStudent.zj" autocomplete="off"/>
+                        <span class="m-switch"></span>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">高考成绩：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.gkcj" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">军训信息：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.jxxx" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">毕业类型：</div>
+                    <label class="cell-right cell-arrow">
+                        <select class="cell-select" v-model="shStudent.bylx">
+                            <option v-for="option in graduation_type" v-bind:value="option.id">{{ option.name }}</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">毕业证书编号：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.byzsbh" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">考区：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.kq" class="cell-input" autocomplete="off" /></div>
+                </div>
+
+                <div class="cell-item">
+                    <div class="cell-left">备注：</div>
+                    <div class="cell-right"><input type="text" v-model="shStudent.remark" class="cell-input" autocomplete="off" /></div>
+                </div>
+            </div>
+
+            <div class="m-button">
+                <button type="button" class="btn-block btn-primary" @click="saveOrUpdate" id="J_ShowActionSheet">提交</button>
+            </div>
+        </form>
+    </section>
+</section>
+<script id="J_ListHtml" type="text/html">
+    {{if isAdmin}}
+    <!-- <select class="cell-select" v-model="{{modelName}}"  {{isRequired}} >-->
+    <option value="">请选择{{labelName}}</option>
+    {{each list as codeEntity i}}
+    <option value="{{codeEntity.id}}">{{codeEntity.name}}</option>
+    {{/each}}
+    <!--</select>-->
+    {{/if}}
+</script>
+<script src="../resources/path/build/js/fastclick.js"></script>
+<!--<script src="../resources/path/build/js/template.js"></script>-->
+<script src="../resources/path/build/js/jquery-3.1.1.min.js"></script>
+<script src="http://static.ydcss.com/uploads/ydui/ydui.citys.js"></script>
+<script src="../resources/path/build/js/ydui.js"></script>
+<script>
+    var $address = $('#province');
+    $address.citySelect();
+    $address.on('click', function () {
+        $address.citySelect('open');
+    });
+
+    $address.on('done.ydui.cityselect', function (ret) {
+        /* 省：ret.provance */
+        /* 市：ret.city */
+        /* 县：ret.area */
+        $(this).val(ret.provance);
+        //   $(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
+    });
+</script>
+<script>
+    !function (win, $) {
+
+        var apiDomain = 'http://183.195.133.44:81';
+        var url = apiDomain + '/app/getCodeByMark/';
+        var arr = ['sex', 'certificate_type', 'marital_status', 'nation', 'policital_status', 'source_country', 'health_status', 'blood_type', 'gatq', 'household'];
+        function getCode(code) {
+            $.ajax({
+                url: url + code,
+                type: 'GET',
+                async: false,
+                dataType: 'json',//传递给请求处理程序或页面的,用以获得jsonp回调函数名的参数名(默认为callback)
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        var label_title = showLabel(code).split(":")[0];
+                        var isRequired = showLabel(code).split(":")[1];
+                        var modelName = showLabel(code).split(":")[2];
+                        var data = {
+                            isAdmin: true,
+                            labelName: label_title,
+                            list: ret.codeEntitys,
+                            isRequired: isRequired,
+                            modelName: modelName
+                        };
+                        var html = template('J_ListHtml', data);
+                        $('#' + code + '_Id').append(html);
+                        if (isRequired != "") {
+                            $('#' + code + '_Id').attr("required", "true");
+                        }
+                    }
+                },
+                error: function (ret) {
+                    alert("服务器连接失败");
+                }
+            });
+        }
+
+        function showLabel(labelInfo) {
+            var label_title = "", required= "", modelName = "";
+            switch (labelInfo) {
+                case 'sex':
+                    label_title = "性别";
+                    required = "required";
+                    modelName = "shStudent.sex";
+                    break;
+                case 'certificate_type':
+                    label_title = "证件类型";
+                    required = "required";
+                    modelName = "shStudent.certificateType";
+                    break;
+                case 'marital_status':
+                    label_title = "婚姻状况";
+                    required = "";
+                    modelName = "shStudent.maritalStatus";
+                    break;
+                case 'nation':
+                    label_title = "民族";
+                    required = "";
+                    modelName = "shStudent.nation";
+                    break;
+                case 'policital_status':
+                    label_title = "政治面貌";
+                    required = "";
+                    modelName = "shStudent.politicalStatus";
+                    break;
+                case 'source_country':
+                    label_title = "来源国别";
+                    required = "";
+                    modelName = "shStudent.sourceCountry";
+                    break;
+                case 'health_status':
+                    label_title = "健康状况";
+                    required = "";
+                    modelName = "shStudent.healthCondition";
+                    break;
+                case 'blood_type':
+                    label_title = "血型";
+                    required = "";
+                    modelName = "shStudent.bloodType";
+                    break;
+                case 'gatq':
+                    label_title = "港澳台侨";
+                    required = "";
+                    modelName = "shStudent.emigrantcode";
+                    break;
+                case 'household':
+                    label_title = "入学前户口性质";
+                    required = "required";
+                    modelName = "shStudent.householdRegistrationType";
+                    break;
+            }
+            return label_title + ':' + required + ":" + modelName;
+        }
+
+    }(window, jQuery);
+
+    var $sex = JSON.parse(localStorage.getItem('sex')) || [];
+    var $certificate_type = JSON.parse(localStorage.getItem('certificate_type')) || [];
+    var $marital_status = JSON.parse(localStorage.getItem('marital_status')) || [];
+    var $nation = JSON.parse(localStorage.getItem('nation')) || [];
+    var $policital_status = JSON.parse(localStorage.getItem('policital_status')) || [];
+    var $source_country = JSON.parse(localStorage.getItem('source_country')) || [];
+    var $health_status = JSON.parse(localStorage.getItem('health_status')) || [];
+    var $blood_type = JSON.parse(localStorage.getItem('blood_type')) || [];
+    var $gatq = JSON.parse(localStorage.getItem('gatq')) || [];
+    var $household = JSON.parse(localStorage.getItem('household')) || [];
+    var $student_type = JSON.parse(localStorage.getItem('student_type')) || [];
+    var $student_identity = JSON.parse(localStorage.getItem('student_identity')) || [];
+    var $department = JSON.parse(localStorage.getItem('department')) || [];
+    var $campus = JSON.parse(localStorage.getItem('campus')) || [];
+    var $profession = JSON.parse(localStorage.getItem('profession')) || [];
+    var $clazz = JSON.parse(localStorage.getItem('class')) || [];
+    var $enrolment = JSON.parse(localStorage.getItem('enrolment')) || [];
+    var $cultivation_mode = JSON.parse(localStorage.getItem('cultivation_mode')) || [];
+    var $degree = JSON.parse(localStorage.getItem('degree')) || [];
+    var $academic = JSON.parse(localStorage.getItem('academic')) || [];
+    var $registered_school_year = JSON.parse(localStorage.getItem('registered_school_year')) || [];
+    var $semester = JSON.parse(localStorage.getItem('semester')) || [];
+    var $graduation_type = JSON.parse(localStorage.getItem('graduation_type')) || [];
+
+
+
+    var dialog = window.YDUI.dialog;
+    var $shStudent = JSON.parse(localStorage.getItem("studentInfo"));
+    if ($shStudent != null) {
+        console.log($shStudent);
+        console.log(Object.keys($shStudent).length == 0);
+        if (Object.keys($shStudent).length == 0) {
+             window.YDUI.dialog.toast('很抱歉，用户登录信息已过期，请重新登录', 'error', 3000, function () {
+             localStorage.clear();
+             window.location = 'register_manager.html';
+             });
+        } else  {
+            var vm = new Vue({
+                el:'#rrapp',
+                editor: null,
+                data:{
+                    shStudent: $shStudent,
+                    sex:$sex,
+                    certificate_type: $certificate_type,
+                    marital_status: $marital_status,
+                    nation: $nation,
+                    policital_status: $policital_status,
+                    source_country: $source_country,
+                    health_status: $health_status,
+                    blood_type: $blood_type,
+                    gatq: $gatq,
+                    household: $household,
+                    student_type: $student_type,
+                    student_identity: $student_identity,
+                    department: $department,
+                    profession: $profession,
+                    clazz: $clazz,
+                    enrolment: $enrolment,
+                    cultivation_mode: $cultivation_mode,
+                    degree: $degree,
+                    academic: $academic,
+                    registered_school_year: $registered_school_year,
+                    semester: $semester,
+                    graduation_type: $graduation_type,
+                    campus: $campus
+                },
+                created: function() {
+                    console.log("页面初始化完成111");
+                },
+                //vue实例挂载完毕之后马上从后台获取数据,vue的生命周期中一个实例的mounted只会运行一次,mounted在vue的渲染模板挂载到$el元素上才会调用
+                mounted: function() {
+                    console.log("页面初始化完成222");
+                    //这个是钩子函数
+                    /*this.$nextTick(function () {
+                     this.getSelectInfo();
+                     })*/
+
+                },
+                methods: {
+                    saveOrUpdate: function (event) {
+                        var url = vm.shStudent.id == null ? 'http://183.195.133.44:81/' + "app/shStudentSave" : 'http://183.195.133.44:81/' + "app/shStudentUpdate";
+                        vm.shStudent['homeAddress'] = $shStudent.homeAddress;
+                        vm.shStudent['nativePlace'] = $('#nativePlace').val().replace(/\s/ig,'');
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: JSON.stringify(vm.shStudent),
+                            dataType: 'json',
+                            async: false,
+                            contentType:'application/json;charset=UTF-8',
+                            success: function(r){
+                                if(r.code == 0){
+                                    /* 正确提示框 */
+                                    localStorage.setItem("studentId", r.uuid);
+                                    vm.shStudent.id = r.uuid;
+                                    dialog.toast(r.msg, 'success', 1000, function () {
+                                        //重新缓存个人信息
+                                        var shStudentEntity = JSON.stringify(r.shStudentEntity);
+                                        localStorage.setItem('studentInfo', JSON.stringify(r.shStudentEntity));
+                                        $shStudent = shStudentEntity;
+                                    });
+                                }else{
+                                    dialog.toast(r.msg, 'error', 1000, function () {
+                                        dialog.alert('请检查后，重新提交!');
+                                    });
+                                }
+                            }
+                        });
+                    },
+                    getInfo: function(id){
+                        var local_shStudent = JSON.parse(localStorage.getItem("studentInfo"));
+                        if (jQuery.isEmptyObject(local_shStudent)) {
+                            $.ajax({
+                                url: 'http://183.195.133.44:81' + "/app/getStudentInfoByCard/" + $idCard,
+                                type: "POST",
+                                dataType: "json",
+                                async: false,
+                                contentType:'application/json;charset=UTF-8',
+                                success: function (data) {
+                                    console.log(data);
+                                    if (data.code == 0) {
+                                        localStorage.setItem("studentInfo", JSON.stringify(data.shStudent));
+                                        vm.shStudent = data.shStudent;
+                                    } else {
+                                        dialog.alert('很抱歉，数据验证失败，请重新尝试！');
+                                    }
+                                }
+                            });
+                        } else {
+                            vm.shStudent = local_shStudent;
+                        }
+                    },
+                    getSelectInfo: function () {
+                        var arr = ['sex', 'certificate_type', 'marital_status', 'nation', 'policital_status', 'source_country', 'health_status', 'blood_type', 'gatq', 'household'];
+                        for (let i of arr) {
+                            this.$http.get('http://183.195.133.44:81/app/getCodeByMark/' + i).then(function(res){
+                                console.log(res.data);
+                                var selectInfo = res.data.codeEntitys;
+                                switch (i) {
+                                    case 'sex':
+                                        this.sex = selectInfo;
+                                        break;
+                                    case 'certificate_type':
+                                        this.certificate_type = selectInfo;
+                                        break;
+                                    case 'marital_status':
+                                        this.marital_status = selectInfo;
+                                        break;
+                                    case 'nation':
+                                        this.nation = selectInfo;
+                                        break;
+                                    case 'policital_status':
+                                        this.policital_status = selectInfo;
+                                        break;
+                                    case 'source_country':
+                                        this.source_country = selectInfo;
+                                        break;
+                                    case 'health_status':
+                                        this.health_status = selectInfo;
+                                        break;
+                                    case 'blood_type':
+                                        this.blood_type = selectInfo;
+                                        break;
+                                    case 'gatq':
+                                        this.gatq = selectInfo;
+                                        break;
+                                    case 'household':
+                                        this.household = selectInfo;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            });
+                        }
+
+                    }
+                }
+            });
+        }
+    } else {
+        window.YDUI.dialog.toast('很抱歉，用户登录信息已过期，请重新登录', 'error', 3000, function () {
+            localStorage.clear();
+            window.location = 'register_manager.html';
+        });
+    }
+
+    /**
+     * 选择籍贯
+     **/
+    function selectJg() {
+        var $target = $('#nativePlace');
+        $target.citySelect();
+        $target.citySelect('open');
+        /*$target.on('click', function (event) {
+         event.stopPropagation();  //阻止事件传播
+         //   event.preventDefault(); 阻止事件的默认行为
+         $target.citySelect('open');
+         },{passive: true});*/
+
+        $target.on('done.ydui.cityselect', function (ret) {
+            /* 省：ret.provance */
+            /* 市：ret.city */
+            /* 县：ret.area */
+            $(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
+        });
+    }
+
+</script>
+</body>
+</html>

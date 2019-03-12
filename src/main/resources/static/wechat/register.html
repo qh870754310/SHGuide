@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>报到情况</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/vue-ydui/dist/ydui.rem.css">
+    <!-- 引入rem自适应类库 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/build/css/ydui.css?rev=a4b9d6e8c9c1cae7ea4676f911682af7"/>
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/demo/css/demo.css"/>
+    <script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.flexible.js"></script>
+    <script src="../resources/path/build/js/vue.min.js"></script>
+    <style>
+        .cell-icon {
+            color: red;
+            margin-right: 0.1rem;
+            margin-top: 0.2rem;
+            margin-left: 0.1rem;
+        }
+    </style>
+</head>
+<body>
+<section class="g-flexview">
+
+    <header class="m-navbar">
+        <a href="personinfo.html" class="navbar-item"><i class="back-ico"></i></a>
+        <div class="navbar-center"><span class="navbar-title">报到情况</span></div>
+    </header>
+
+    <section class="g-scrollview" id="rrapp" v-cloak>
+        <div class="m-celltitle demo-small-pitch">报到情况</div>
+        <div class="m-cell demo-small-pitch">
+            <div class="cell-item">
+                <div class="cell-left">到达地点<i class="cell-icon">*</i></div>
+                <div class="cell-right"><input type="text" v-model="shStudent.arrival" class="cell-input" readonly="readonly" required autocomplete="off" /></div>
+            </div>
+
+            <div class="cell-item">
+                <div class="cell-left">预计到达时间：</div>
+                <div class="cell-right"><input class="cell-input" v-model="shStudent.arrivalTime" type="datetime-local" id="arrival_time" placeholder=""/>
+                </div>
+            </div>
+
+            <div class="cell-item">
+                <div class="cell-left">到达车次或班次：</div>
+                <div class="cell-right"><input type="text" v-model="shStudent.arrivalFlight" class="cell-input" autocomplete="off" /></div>
+            </div>
+
+            <div class="cell-item">
+                <div class="cell-left">是否自备车：</div>
+                <label class="cell-right">
+                    <input type="checkbox" class="m-switch-old" id="selfMadeCar" v-model="shStudent.selfMadeCar"/>
+                    <span class="m-switch"></span>
+                </label>
+            </div>
+
+            <div class="cell-item">
+                <div class="cell-left">随行人数：</div>
+                <div class="cell-right"><input type="text" v-model="shStudent.entourage" class="cell-input" autocomplete="off" /></div>
+            </div>
+
+            <div class="cell-item">
+                <div class="cell-left">是否走读<i class="cell-icon">*</i></div>
+                <label class="cell-right">
+                    <input type="checkbox" id="nonResident" v-model="shStudent.nonResident" class="m-switch-old" required/>
+                    <span class="m-switch"></span>
+                </label>
+            </div>
+
+            <div class="cell-item">
+                <div class="cell-left">是否预定生活用品<i class="cell-icon">*</i></div>
+                <label class="cell-right">
+                    <input type="checkbox" id="bookLiving" v-model="shStudent.bookLiving" class="m-switch-old" required/>
+                    <span class="m-switch"></span>
+                </label>
+            </div>
+        </div>
+        <div class="m-button">
+            <button type="button" class="btn-block btn-primary" @click="saveOrUpdate">提交</button>
+        </div>
+    </section>
+
+</section>
+<!-- 引入组件库 -->
+<script src="../resources/path/build/js/fastclick.js"></script>
+<script src="../resources/path/build/js/jquery-3.1.1.min.js"></script>
+<script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.js"></script>
+<script>
+    !function (win, $) {
+        FastClick.attach(document.body);
+        var dialog = win.YDUI.dialog;
+
+        window.apiDomain = 'http://183.195.133.44:81/';
+        //获取缓存中登录学生的id
+        window.$studentId = localStorage.getItem("studentId");
+
+        var vm = new Vue({
+            el:'#rrapp',
+            data: {
+                shStudent : {
+                    id: $studentId,
+                    arrival: '上海科学技术职业学院',
+                    arrivalTime: '',
+                    arrivalFlight: '',
+                    selfMadeCar: '',
+                    entourage: '',
+                    nonResident: '',
+                    bookLiving: ''
+                }
+            },
+            methods: {
+                saveOrUpdate: function (event) {
+                    vm.shStudent['arrivalTime'] = $('#arrival_time').val().replace("T", " ");
+                    console.log(JSON.stringify(vm.shStudent));
+                    var url = "http://183.195.133.44:81/app/shStudentUpdate" ;
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        dataType: 'json',
+                        contentType:'application/json;charset=UTF-8',
+                        data: JSON.stringify(vm.shStudent),
+                        success: function(r){
+                            if(r.code == 0) {
+                                /* 正确提示框 */
+                                $('#arrival_time').val(vm.shStudent.arrivalTime.replace(" ", "T"));
+                                window.YDUI.dialog.toast(r.msg, 'success', 1000, function () {
+                                });
+                            } else{
+                                window.YDUI.dialog.toast(r.msg, 'error', 1000, function () {
+                                    window.YDUI.dialog.alert('保存失败，请检查后，重新提交!');
+                                });
+                            }
+                        }
+                    });
+                },
+                getInfo: function(id){
+                    $.get("http://183.195.133.44:81/app/getStudentInfoById/"+id, function(r){
+                        if(r.code == 0){
+                            vm.shStudent = r.shStudent;
+                        }else{
+                            alert(r.msg);
+                        }
+                    });
+                }
+            }
+        });
+
+        if ($studentId) { //若本地存在个人信息，则从本地库查询，否则从远程库查询
+            var url = 'http://183.195.133.44:81/' + 'app/getStudentInfoById/' + $studentId;
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                contentType:'application/json;charset=UTF-8',
+                success: function (ret) {
+                    console.log(ret);
+                    if (ret.code == 0) {
+                        if (ret.shStudent.arrivalTime) {
+                            vm.shStudent['arrivalTime'] = ret.shStudent.arrivalTime.replace(" ", "T");
+                        } else {
+                            vm.shStudent['arrivalTime'] = ret.shStudent.arrivalTime;
+                        }
+                        vm.shStudent['arrivalFlight'] = ret.shStudent.arrivalFlight;
+                        vm.shStudent['selfMadeCar'] = ret.shStudent.selfMadeCar;
+                        vm.shStudent['entourage'] = ret.shStudent.entourage;
+                        vm.shStudent['nonResident'] = ret.shStudent.nonResident;
+                        vm.shStudent['bookLiving'] = ret.shStudent.bookLiving;
+                    } else {
+                        window.YDUI.dialog.alert('很抱歉，数据查询失败，请重新尝试！');
+                    }
+                }
+            });
+        } else {
+            window.YDUI.dialog.toast('很抱歉，用户登录信息已过期，请重新登录', 'error', 3000, function () {
+                window.location = 'register_manager.html';
+            });
+        }
+
+    }(window, jQuery);
+</script>
+</body>
+</html>

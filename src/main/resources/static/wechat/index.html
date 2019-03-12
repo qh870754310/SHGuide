@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上海科学技术职业学院-入学引导</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,800italic,400,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,700,300,200,100,900' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>
+    <!-- 引入YDUI样式 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/build/css/ydui.css" />
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/demo/css/demo.css" />
+    <!-- 引入YDUI自适应解决方案类库 -->
+    <script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.flexible.js"></script>
+    <style>
+        body{
+            font-family: 'Open Sans', arial, sans-serif;
+            background: url("../resources/path/build/images/bg.png") no-repeat center;
+            background-repeat:no-repeat ;
+            background-size:100% auto;
+            background-attachment: fixed;
+        }
+        *{
+            margin:0;
+            padding:0;
+        }
+        #categories{
+            overflow:hidden;
+            width:90%;
+            margin:0 auto;
+        }
+        .clr:after{
+            content:"";
+            display:block;
+            clear:both;
+        }
+        #categories li{
+            position:relative;
+            list-style-type:none;
+            /*width:27.85714285714286%;*/ /* = (100-2.5) / 3.5 */
+            /* padding-bottom: 32.16760145166612%;*/ /* =  width /0.866 */
+            width:24.125%; /* = (100-2.5) / 3.5 */
+            padding-bottom: 27.85796%; /* =  width /0.866 */
+            float:left;
+            overflow:hidden;
+            visibility:hidden;
+
+            /* -webkit-transform: rotate(-60deg) skewY(30deg);
+             -ms-transform: rotate(-60deg) skewY(30deg);
+             transform: rotate(-60deg) skewY(30deg);*/
+
+            -webkit-transform: rotate(30deg) skewY(30deg);
+            -ms-transform: rotate(30deg) skewY(30deg);
+            transform: rotate(30deg) skewY(30deg);
+
+        }
+        #categories li:nth-child(11n+1){
+            margin: 21% 2%;
+        }
+        #categories li:nth-child(11n+2){
+            margin: 7% -3%;
+        }
+        #categories li:nth-child(11n+3){
+            margin: 21% 2%;
+        }
+        #categories li:nth-child(11n+4){
+            margin: -35% 25%;
+        }
+        #categories li:nth-child(11n+5){
+            margin: -7% 25%;
+        }
+        #categories li:nth-child(11n+6){
+            margin: -35% 48%;
+        }
+        #categories li:nth-child(11n+7){
+            margin: -7% 48%;
+        }
+        #categories li:nth-child(11n+8){
+            margin: 7% 48%;
+        }
+        #categories li:nth-child(11n+9){
+            margin: -77% 72%;
+        }
+        #categories li:nth-child(11n+10){
+            margin: -49% 72%;
+        }
+        /*#categories li:nth-child(3n+2){
+            margin:0 1%;
+        }*/
+        /*#categories li:nth-child(6n+4){
+            margin-left:0.5%;
+        }*/
+        /* #categories li:nth-child(6n+4), #categories li:nth-child(6n+5), #categories li:nth-child(6n+6) {
+             margin-top: -6.9285714285%;
+             margin-bottom: -6.9285714285%;
+
+             !*-webkit-transform: translateX(50%) rotate(-60deg) skewY(30deg);
+             -ms-transform: translateX(50%) rotate(-60deg) skewY(30deg);
+             transform: translateX(50%) rotate(-60deg) skewY(30deg);*!
+
+             -webkit-transform: translateX(50%) rotate(30deg) skewY(30deg);
+             -ms-transform: translateX(50%) rotate(30deg) skewY(30deg);
+             transform: translateX(50%) rotate(30deg) skewY(30deg);
+         }
+         #categories li:nth-child(6n+4):last-child, #categories li:nth-child(6n+5):last-child, #categories li:nth-child(6n+6):last-child{
+             margin-bottom:0%;
+         }*/
+        #categories li *{
+            position:absolute;
+            visibility:visible;
+        }
+        #categories li > div{
+            width:100%;
+            height:100%;
+            text-align:center;
+            color:#fff;
+            overflow:hidden;
+
+            -webkit-transform: skewY(-30deg) rotate(60deg);
+            -ms-transform: skewY(-30deg) rotate(60deg);
+            transform: skewY(-30deg) rotate(60deg);
+
+            -webkit-backface-visibility:hidden;
+        }
+
+        /* HEX CONTENT */
+        #categories li img{
+            left:-100%; right:-100%;
+            width: auto; height:100%;
+            margin:0 auto;
+            /*transform: skewY(0deg) rotate(90deg);*/
+            -webkit-transform: skewY(0deg) rotate(90deg);
+            -ms-transform: skewY(0deg) rotate(90deg);
+            transform: skewY(0deg) rotate(-90deg);
+        }
+
+        #categories div h1, #categories div p{
+            width:90%;
+            padding:0 5%;
+            background-color:#008080; background-color: rgba(0, 128, 128, 0.8);
+            font-family: 'Raleway', sans-serif;
+
+            -webkit-transition: top .2s ease-out, bottom .2s ease-out, .2s padding .2s ease-out;
+            -ms-transition: top .2s ease-out, bottom .2s ease-out, .2s padding .2s ease-out;
+            transition: top .2s ease-out, bottom .2s ease-out, .2s padding .2s ease-out;
+        }
+        #categories li h1{
+            bottom:110%;
+            font-style:italic;
+            font-weight:normal;
+            font-size:1.5em;
+            padding-top:100%;
+            padding-bottom:100%;
+        }
+        #categories li h1:after{
+            content:'';
+            display:block;
+            position:absolute;
+            bottom:-1px; left:45%;
+            width:10%;
+            text-align:center;
+            z-index:1;
+            border-bottom:2px solid #fff;
+        }
+        #categories li p{
+            padding-top:50%;
+            top:110%;
+            padding-bottom:50%;
+        }
+
+
+        /* HOVER EFFECT  */
+
+        #categories li div:hover h1 {
+            bottom:50%;
+            padding-bottom:10%;
+        }
+
+        #categories li div:hover p{
+            top:50%;
+            padding-top:10%;
+        }
+        #fork{
+            position:fixed;
+            top:0;
+            left:0;
+            color:#000;
+            text-decoration:none;
+            border:1px solid #000;
+            padding:.5em .7em;
+            margin:1%;
+            transition: color .5s;
+            overflow:hidden;
+        }
+        #fork:before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 130%; height: 100%;
+            background: #000;
+            z-index: -1;
+            transform-origin:0 0 ;
+            transform:translateX(-100%) skewX(-45deg);
+            transition: transform .5s;
+        }
+        #fork:hover {
+            color: #fff;
+        }
+        #fork:hover:before {
+            transform: translateX(0) skewX(-45deg);
+        }
+    </style>
+</head>
+<body onLoad="body_onload()">
+<header>
+    <img src="../resources/path/build/images/logo_bg.png" style="width: 100%;"/>
+</header>
+<ul id="categories" class="clr">
+    <li class="pusher">
+        <div>
+            <img src="../resources/path/build/images/注册管理.png" id="register" alt="" onclick="reloadLogin()"/>
+        </div>
+    </li>
+    <li>
+        <div>
+            <img src="../resources/path/build/images/通知公告.png" alt="" onclick="location.href= 'notice.html'"/>
+        </div>
+    </li>
+    <li>
+        <div>
+            <img src="../resources/path/build/images/报到须知.png" alt="" onclick="location.href= 'reporting_guidance.html'"/>
+        </div>
+    </li>
+    <li>
+        <div>
+            <img src="../resources/path/build/images/报道引导.png" alt="" onclick="location.href= 'guidevt.html'"/>
+        </div>
+    </li>
+    <li>
+        <div>
+            <img src="../resources/path/build/images/逛逛校园.png" alt="" onclick="location.href= 'http://xsrx.scst.edu.cn:88/tour.html'"/>
+        </div>
+    </li>
+    <li>
+        <div>
+            <img src="../resources/path/build/images/校园地图.png" alt="" onclick="location.href= 'map_navigator.html'"/>
+        </div>
+    </li>
+
+    <li>
+        <div>
+            <img src="../resources/path/build/images/缴费说明.png" alt="" onclick="location.href= 'explanation_payment.html'"/>
+        </div>
+    </li>
+
+    <li>
+        <div>
+            <img src="../resources/path/build/images/个人信息.png" alt="" onclick="location.href= 'personinfo.html'"/>
+        </div>
+    </li>
+    <li>
+        <div>
+            <img src="../resources/path/build/images/资助政策.png" alt="" onclick="location.href= 'policy_support.html'"/>
+        </div>
+    </li>
+    <li>
+        <div>
+            <img src="../resources/path/build/images/安全信息.png" alt="" onclick="location.href= 'security_information.html'"/>
+        </div>
+    </li>
+</ul>
+<script src="../resources/path/build/js/jquery-3.1.1.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.js"></script>
+<!--<script src="http://wow.techbrood.com/libs/jquery/jquery-1.11.1.min.js"></script>-->
+<script>
+    window.onload = function() {
+        $('#categories').find('li > div > img').each(function () {
+            var $img = $(this).attr("src");
+            $(this).hover(function() {
+                $(this).attr("src", $img.substring(0, $img.length-4) + "_hover.png");
+            }, function () {
+                $(this).attr('src', $img);
+            });
+        });
+    }
+    function body_onload() {
+        window.location.reload(true);
+    }
+
+    function reloadLogin() {
+        window.YDUI.dialog.confirm('', '您确定要重新登录?', function () {
+            localStorage.clear();
+            location.href = 'register_manager.html'
+        });
+    }
+</script>
+</body>
+</html>

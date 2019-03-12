@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>家庭成员</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/vue-ydui/dist/ydui.rem.css">
+    <!-- 引入rem自适应类库 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/build/css/ydui.css?rev=a4b9d6e8c9c1cae7ea4676f911682af7"/>
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/demo/css/demo.css"/>
+    <script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.flexible.js"></script>
+    <script src="../resources/path/build/js/vue.min.js"></script>
+    <style>
+        .cell-icon {
+            color: red;
+            margin-right: 0.1rem;
+        }
+    </style>
+</head>
+<body>
+<section class="g-flexview">
+    <header class="m-navbar">
+        <a href="personinfo.html" class="navbar-item"><i class="back-ico"></i></a>
+        <div class="navbar-center"><span class="navbar-title">家庭成员列表</span></div>
+    </header>
+    <section class="g-scrollview">
+
+        <div class="m-celltitle demo-small-pitch">家庭成员</div>
+        <div class="m-cell" id="J_List">
+        </div>
+        <div class="m-button">
+            <button type="button" class="btn-block btn-primary" onclick="add()">新增</button>
+        </div>
+    </section>
+</section>
+<script id="J_ListHtml" type="text/html">
+    {{each list as data}}
+    <a href="#" class="cell-item" id="{{data.id}}" onclick="toMemberPage()">
+        <div class="cell-left">{{data.relation_code}}</div>
+        <div class="cell-right cell-arrow"></div>
+    </a>
+    {{/each}}
+</script>
+<!-- 引入组件库 -->
+<script src="../resources/path/build/js/fastclick.js"></script>
+<script src="../resources/path/build/js/template.js"></script>
+<script src="../resources/path/build/js/jquery-3.1.1.min.js"></script>
+<script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.js"></script>
+<script>
+    !function (win, $) {
+        FastClick.attach(document.body);
+        var dialog = win.YDUI.dialog;
+
+        window.apiDomain = 'http://183.195.133.44:81/';
+        var $idCard = localStorage.getItem("idCard");
+        var $shStudent = JSON.parse(localStorage.getItem("shStudent"));
+        console.log($shStudent);
+        //获取缓存中登录学生的id
+        window.$studentId = localStorage.getItem("studentId");
+        if ($idCard) {
+            //根据学生id查询其家庭成员列表
+            var url = 'http://183.195.133.44:81/app/getFamilyMemberByIdCard/' + $idCard;
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                contentType:'application/json;charset=UTF-8',
+                success: function (ret) {
+                    console.log(ret);
+                    if (ret.code == 0) {
+                        var html = template('J_ListHtml', {list: ret.shFamilyMemberEntities});
+                        $('#J_List').append(html);
+                    } else {
+                        dialog.alert('很抱歉，信息查询失败！');
+                    }
+                }
+            });
+        } else {
+            dialog.toast('很抱歉，用户登录信息已过期，请重新登录', 'error', 3000, function () {
+                window.location = 'register_manager.html';
+            });
+        }
+    }(window, jQuery);
+
+    function toMemberPage() {
+        if($("a[class='cell-item']").length > 0) {
+            $("a[class='cell-item']").on('click', function () {
+                if ($(this).parent().attr('id') == 'J_List') {
+                    localStorage.setItem('familyMemberId', $(this).attr("id"));
+                    window.location.href = 'family_member.html';
+                }
+            });
+        }
+    }
+
+    function add() {
+        localStorage.removeItem('familyMemberId');
+        location.href= 'family_member.html'
+    }
+</script>
+</body>
+</html>

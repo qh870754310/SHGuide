@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <!-- 引入YDUI样式 -->
+    <link rel="stylesheet" href="../resources/path/build/css/ydui.css" />
+    <!-- 引入YDUI自适应解决方案类库 -->
+    <script src="../resources/path/build/js/ydui.flexible.js"></script>
+    <title>校园地图</title>
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5qnG3inG4VhPZOcjNwj4ycZN"></script>
+    <style type="text/css">
+        html, body{font-size:13px;margin:0px;width:100%;height:100%;overflow-x: hidden; /*overflow-y: hidden;*/}
+        #container{width:100%;height:100%;}
+        .label{margin-left:20px;font-weight:bold;font-size:14px}
+        .anchorBL{
+            display:none;
+        }
+        .BMap_cpyCtrl {
+            display: none;
+        }
+        #suggestId {
+            box-sizing: border-box;
+            border: 0;
+            border-right-color: currentcolor;
+            border-right-style: none;
+            border-right-width: 0px;
+            border-left-color: currentcolor;
+            border-left-style: none;
+            border-left-width: 0px;
+            padding: 9px 0;
+            border-left: 10px solid transparent;
+            border-right: 27px solid transparent;
+            line-height: 20px;
+            font-size: 16px;
+            height: 38px;
+            color: #333;
+            position: relative;
+            border-radius: 2px 0 0 2px;
+        }
+        .m-cell {
+            margin-bottom: 0rem;
+        }
+        .g-scrollview:after {
+            height: 0rem;
+        }
+        #J_ActionSheet {
+            -webkit-overflow-scrolling: touch!important;
+        }
+        .tangram-suggestion-main {z-index: 9999999999;}
+    </style>
+</head>
+<body>
+<section class="g-flexview">
+    <header class="m-navbar">
+        <a href="index.html" class="navbar-item"><i class="back-ico"></i></a>
+        <div class="navbar-center"><span class="navbar-title">校园地图</span></div>
+    </header>
+    <div class="g-scrollview">
+        <div class="m-cell demo-small-pitch">
+            <div class="cell-item">
+                <div class="cell-left">起点：</div>
+                <div class="cell-right">
+                    <input type="text" id="startId" class="cell-input" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-left">终点：</div>
+                <div class="cell-right">
+                    <input type="text" id="suggestId" class="cell-input" placeholder="请输入要去的目的地" autocomplete="off" />
+                </div>
+            </div>
+            <div id="r-result" style="border:1px solid #FFF;width:100%;height:auto;position:relative;bottom: 0;"></div>
+        </div>
+        <div id="container"></div>
+       <!-- <div class="m-button" style="display: none">
+            <button type="button" class="btn-block btn-warning" id="J_ShowActionSheet">开始导航</button>
+        </div>
+        <div class="m-actionsheet" id="J_ActionSheet" style="display: none">
+        </div>-->
+    </div>
+</section>
+<!-- 引入jQuery 2.0+ -->
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../resources/path/build/js/ydui.js"></script>
+<script type="text/javascript">
+    var dialog = window.YDUI.dialog;
+    var map = new BMap.Map("container");
+    var point = new BMap.Point(121.264624,31.392408);
+    map.centerAndZoom(point,17);
+    map.enableScrollWheelZoom();
+    window.map = map;
+
+    /**
+     * 在HTML5中，通过window.navigator对象下新增geolocation属性来判断浏览器的兼容性
+     **/
+    function geolocationSupport() {
+        if(!navigator.geolocation) {
+            alert('当前浏览器不支持HTML5 Geolocation')
+        } else {
+            getCurrentPlace();
+        }
+    }
+
+    function G(id) {
+        return document.getElementById(id);
+    }
+
+    /**
+     * h5定位-当前位置
+     **/
+    function getCurrentPlace() {
+        if (navigator.geolocation) {
+            var options={
+                enableHighAccuracy:true,
+                timeout:60000,
+                maximumAge:60000
+            };
+            navigator.geolocation.getCurrentPosition(showPosition, showError, options);
+        } else {
+            alert("您的设备不支持定位功能");
+        }
+    }
+
+    function showError(error){
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                alert("定位失败,用户拒绝请求地理定位");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("定位失败,位置信息是不可用");
+                break;
+            case error.TIMEOUT:
+                alert("定位失败,请求获取用户位置超时");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("定位失败,定位系统失效");
+                break;
+        }
+    }
+
+    function showPosition(position) {
+        var location_lon = position.coords.longitude; //经度
+        var location_lat = position.coords.latitude;  //纬度
+        var latlon = position.coords.latitude+','+position.coords.longitude;
+        console.log(latlon);
+        var url = "http://api.map.baidu.com/geocoder/v2/?ak=5qnG3inG4VhPZOcjNwj4ycZN&callback=renderReverse&location="+latlon+"&output=json&pois=0";
+        var s = "http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location="+ latlon + "&output=json&pois=1&ak=5qnG3inG4VhPZOcjNwj4ycZN";
+        $.ajax({
+            type: "GET",
+            dataType: "jsonp",
+            url: url,
+            success: function (json) {
+                console.log(json.result.formatted_address);
+                var ggPoint = new BMap.Point(json.result.location.lng,json.result.location.lat);//创建标点
+
+                //添加gps marker和label
+                var markergg = new BMap.Marker(ggPoint);
+                map.addOverlay(markergg); //添加GPS marker
+          //      var labelgg = new BMap.Label("未转换的原始坐标（错误）",{offset:new BMap.Size(20,-10)});
+          //      markergg.setLabel(labelgg); //添加GPS label
+                //坐标转换完之后的回调函数
+                translateCallback = function (data){
+                    if(data.status === 0) {
+                        var marker = new BMap.Marker(data.points[0]);
+                        map.addOverlay(marker);
+                        var label = new BMap.Label("我的位置",{offset:new BMap.Size(20,-10)});
+                        marker.setLabel(label); //添加百度label
+                        map.setCenter(data.points[0]);
+                    }
+                };
+                var convertor = new BMap.Convertor();//这个类就是转换的对象
+                var pointArr = [];
+                pointArr.push(ggPoint);
+                convertor.translate(pointArr, 1, 5, translateCallback)//通过调用回调函数来进行转换。
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+            }
+        });
+    }
+
+    window.onload=geolocationSupport();
+
+    var geolocation = new BMap.Geolocation();
+    //获取当前用户的地理位置
+    geolocation.getCurrentPosition(function(r){
+        console.log(r.point);
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            var mk = new BMap.Marker(r.point);
+            map.addOverlay(mk);//标出所在地
+            map.panTo(r.point);//地图中心移动
+            console.log('您的位置：'+r.point.lng+','+r.point.lat);
+            var point = new BMap.Point(r.point.lng,r.point.lat);//用所定位的经纬度查找所在地省市街道等信息
+            //反向地理编码
+            // 创建地理编码实例
+            var gc = new BMap.Geocoder();
+            // 根据坐标得到地址描述
+            gc.getLocation(point, function(rs){
+                console.log(rs);
+                var addComp = rs.addressComponents;
+                $('#startId').val(rs.address);//地址信息
+
+            });
+            /*
+            var convertor = new BMap.Convertor();//这个类就是转换的对象
+            var pointArr = [];
+            pointArr.push(r.point);
+            convertor.translate(pointArr, 1, 5, function (data){
+                if(data.status === 0) {
+                    var marker = new BMap.Marker(data.points[0]);
+                    map.addOverlay(marker);
+                    map.setCenter(data.points[0]);
+                    var gc = new BMap.Geocoder();
+                    gc.getLocation(data.points[0], function(rs){
+                        console.log(rs);
+                        var addComp = rs.addressComponents;
+                        alert(rs.address);//弹出所在地址
+
+                    });
+
+                }
+            });//通过调用回调函数来进行转换。
+            */
+        }else {
+            alert('failed'+this.getStatus());
+        }
+    },{enableHighAccuracy: true});
+
+    var abc = new BMap.Autocomplete(    //建立一个自动完成的对象
+        {"input" : "startId"
+            ,"location" : map
+        });
+
+    abc.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+        var str = "";
+        var _value = e.fromitem.value;
+        var value = "";
+        if (e.fromitem.index > -1) {
+            value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+        }
+
+        value = "";
+        if (e.toitem.index > -1) {
+            _value = e.toitem.value;
+            value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+        }
+    });
+
+
+    abc.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+        var _value = e.item.value;
+        myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+
+
+    });
+
+    var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+        {"input" : "suggestId"
+            ,"location" : map
+        });
+
+    ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+        var str = "";
+        var _value = e.fromitem.value;
+        var value = "";
+        if (e.fromitem.index > -1) {
+            value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+        }
+
+        value = "";
+        if (e.toitem.index > -1) {
+            _value = e.toitem.value;
+            value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+        }
+    });
+
+    var myValue;
+    ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+        var _value = e.item.value;
+        myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+        console.log(myValue);
+        $('#suggestId').blur();
+        setPlace(myValue);
+    });
+
+    function setPlace(destination){// 创建地址解析器实例
+        var myGeo = new BMap.Geocoder();// 将地址解析结果显示在地图上,并调整地图视野
+        myGeo.getPoint(myValue, function(point){
+            if (point) {
+                map.centerAndZoom(point, 16);
+                map.addOverlay(new BMap.Marker(point));
+            }
+        }, "上海");
+        var walking = new BMap.WalkingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+        $('#container').css("height", "80%");
+
+        /*$('.m-button').css("display", "block");
+        $('#J_ActionSheet').css("display", "block");*/
+
+        if ($('#startId').val()) {
+            walking.search($('#startId').val(), destination);
+        } else {
+            dialog.notify('起点不能为空', 3000, function(){
+                $('#startId').focus();
+            });
+        }
+    }
+
+</script>
+<!--<script>
+    !function ($) {
+        var $myAs = $('#J_ActionSheet');
+
+        $('#J_ShowActionSheet').on('click', function () {
+            $myAs.actionSheet('open');
+        });
+
+        // 自定义事件
+        $myAs.on('open.ydui.actionsheet', function () {
+            console.log('打开了');
+        }).on('close.ydui.actionsheet', function () {
+            console.log('关闭了');
+        });
+    }(jQuery);
+</script>-->
+</body>
+</html>

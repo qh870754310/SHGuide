@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>曾担任职务及获奖信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/vue-ydui/dist/ydui.rem.css">
+    <!-- 引入rem自适应类库 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/build/css/ydui.css?rev=a4b9d6e8c9c1cae7ea4676f911682af7"/>
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/demo/css/demo.css"/>
+    <script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.flexible.js"></script>
+    <script src="../resources/path/build/js/vue.min.js"></script>
+</head>
+<body>
+<section class="g-flexview">
+
+    <header class="m-navbar">
+        <a href="personinfo.html" class="navbar-item"><i class="back-ico"></i></a>
+        <div class="navbar-center"><span class="navbar-title">曾担任职务及获奖信息</span></div>
+    </header>
+
+    <section class="g-scrollview" id="rrapp" v-cloak>
+        <div class="m-celltitle demo-small-pitch">曾担任职务及获奖信息</div>
+        <div class="m-cell">
+            <div class="cell-item">
+                <div class="cell-right">
+                    <textarea class="cell-textarea" v-model="shStudent.award" placeholder="请输入您曾担任职务及获奖信息"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="m-button">
+            <button type="button" class="btn-block btn-primary" @click="saveOrUpdate">提交</button>
+        </div>
+    </section>
+
+</section>
+<!-- 引入组件库 -->
+<script src="../resources/path/build/js/fastclick.js"></script>
+<script src="../resources/path/build/js/jquery-3.1.1.min.js"></script>
+<script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.js"></script>
+<script>
+
+    !function (win, $) {
+        FastClick.attach(document.body);
+        var dialog = win.YDUI.dialog;
+
+        window.apiDomain = 'http://183.195.133.44:81/';
+        //获取缓存中登录学生的id
+        window.$studentId = localStorage.getItem("studentId");
+
+        var vm = new Vue({
+            el:'#rrapp',
+            data: {
+                shStudent : {
+                    id: $studentId,
+                    award: ''
+                }
+            },
+            methods: {
+                saveOrUpdate: function (event) {
+                    console.log(JSON.stringify(vm.shStudent));
+                    var url = "http://183.195.133.44:81/app/shStudentUpdate" ;
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        dataType: 'json',
+                        contentType:'application/json;charset=UTF-8',
+                        data: JSON.stringify(vm.shStudent),
+                        success: function(r){
+                            if(r.code == 0) {
+                                /* 正确提示框 */
+                                window.YDUI.dialog.toast(r.msg, 'success', 1000, function () {
+                                });
+                            } else{
+                                window.YDUI.dialog.toast(r.msg, 'error', 1000, function () {
+                                    window.YDUI.dialog.alert('保存失败，请检查后，重新提交!');
+                                });
+                            }
+                        }
+                    });
+                },
+                getInfo: function(id){
+                    $.get("http://183.195.133.44:81/app/getStudentInfoById/"+id, function(r){
+                        if(r.code == 0){
+                            vm.shStudent = r.shStudent;
+                        }else{
+                            alert(r.msg);
+                        }
+                    });
+                }
+            }
+        });
+
+
+        if ($studentId) { //若本地存在个人信息，则从本地库查询，否则从远程库查询
+            var url = 'http://183.195.133.44:81/' + 'app/getStudentInfoById/' + $studentId;
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                contentType:'application/json;charset=UTF-8',
+                success: function (ret) {
+                    console.log(ret);
+                    if (ret.code == 0) {
+                        vm.shStudent['award'] = ret.shStudent.award;
+                    } else {
+                        window.YDUI.dialog.alert('很抱歉，数据查询失败，请重新尝试！');
+                    }
+                }
+            });
+        } else {
+            window.YDUI.dialog.toast('很抱歉，用户登录信息已过期，请重新登录', 'error', 3000, function () {
+                window.location = 'register_manager.html';
+            });
+        }
+    }(window, jQuery);
+
+</script>
+</body>
+</html>

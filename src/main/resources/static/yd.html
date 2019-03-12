@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>上海科学技术职业学院-入学引导</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <script>
+        localStorage.setItem('apiDomain', "http://183.195.133.44:81");
+        var $idCard = localStorage.getItem("idCard");
+        var $shStudent = JSON.parse(localStorage.getItem("studentInfo"));
+        console.log($idCard);
+        console.log($shStudent);
+        if ($idCard != null && $shStudent != null) {
+            location = '/wechat/index.html';
+        } else {
+            location = '/wechat/register_manager.html';
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

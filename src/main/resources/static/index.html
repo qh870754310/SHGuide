@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>上海科技职业技术学院</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <script th:inline="javascript">
+        localStorage.setItem('apiDomain', "http://183.195.133.44:81");
+        var type = window.location.href;
+        String.prototype.endWith=function(endStr){
+            var d=this.length-endStr.length;
+            return (d>=0&&this.lastIndexOf(endStr)==d);
+        };
+        if (type.endWith("zszn")) {
+            location = '/wechat/school_Index.html';
+        } else {
+            location = '/wechat/index.html';
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

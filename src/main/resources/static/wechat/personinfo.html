@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>个人信息列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/vue-ydui/dist/ydui.rem.css">
+    <!-- 引入rem自适应类库 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/build/css/ydui.css?rev=a4b9d6e8c9c1cae7ea4676f911682af7"/>
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/demo/css/demo.css"/>
+    <script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.flexible.js"></script>
+</head>
+<body>
+<section class="g-flexview">
+    <header class="m-navbar">
+        <a href="index.html" class="navbar-item"><i class="back-ico"></i></a>
+        <div class="navbar-center"><span class="navbar-title">个人信息类型</span></div>
+    </header>
+    <section class="g-scrollview">
+        <div class="m-cell">
+            <a href="bb.html" class="cell-item">
+                <div class="cell-left"><i class="cell-icon"><img src="../resources/path/build/images/info.png"></i>基本信息</div>
+                <div class="cell-right cell-arrow"></div>
+            </a>
+            <a href="#" class="cell-item" onclick="validateBasicInfo('contact_way')">
+                <div class="cell-left"><i class="cell-icon"><img src="../resources/path/build/images/tel.png"></i>联系方式</div>
+                <div class="cell-right cell-arrow"></div>
+            </a>
+            <a href="#" class="cell-item" onclick="validateBasicInfo('award_situation')">
+                <div class="cell-left"><i class="cell-icon"><img src="../resources/path/build/images/honnor.png"></i>曾担任职务及获奖信息</div>
+                <div class="cell-right cell-arrow"></div>
+            </a>
+            <a href="#" class="cell-item" onclick="validateBasicInfo('specialties')">
+                <div class="cell-left"><i class="cell-icon"><img src="../resources/path/build/images/techang.png"></i>特长</div>
+                <div class="cell-right cell-arrow"></div>
+            </a>
+            <a href="#" class="cell-item" onclick="validateBasicInfo('register')">
+                <div class="cell-left"><i class="cell-icon"><img src="../resources/path/build/images/baodao.png"></i>报到情况</div>
+                <div class="cell-right cell-arrow"></div>
+            </a>
+            <a href="#" class="cell-item" onclick="validateBasicInfo('family_member_list')">
+                <div class="cell-left"><i class="cell-icon"><img src="../resources/path/build/images/pel.png"></i>家庭成员</div>
+                <div class="cell-right cell-arrow"></div>
+            </a>
+        </div>
+    </section>
+</section>
+<!-- 引入组件库 -->
+<script src="../resources/path/build/js/fastclick.js"></script>
+<script src="../resources/path/build/js/jquery-3.1.1.min.js"></script>
+<script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.js"></script>
+<script>
+    !function (win, $) {
+        FastClick.attach(document.body);
+        var dialog = win.YDUI.dialog;
+        window.apiDomain = 'http://183.195.133.44:81';
+
+        //var apiDomain = 'http://183.195.133.44:81';
+        var url = 'http://183.195.133.44:81' + '/app/getCodeByMark/';
+        function getCode(code) {
+            $.ajax({
+                url: url + code,
+                type: 'GET',
+                async: false,
+                dataType: 'json',//传递给请求处理程序或页面的,用以获得jsonp回调函数名的参数名(默认为callback)
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        localStorage.setItem(code, JSON.stringify(ret.codeEntitys));
+                    }
+                },
+                error: function (ret) {
+                    alert("服务器连接失败");
+                }
+            });
+        }
+
+        var $idCard = localStorage.getItem("idCard");
+        var $studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
+        console.log($studentInfo);
+
+        //根据$studentId判断登录用户的信息是来自远程库还是本地库
+        var $studentId = $studentInfo.id;
+        window._studentId = $studentId;
+        console.log($studentId);
+        if ($idCard) {
+            if ($studentId) {  //数据来自本地数据库
+
+            } else {
+
+            }
+            //后台获取数据字典
+            var arr = ['sex', 'certificate_type', 'marital_status', 'nation', 'policital_status', 'source_country', 'health_status', 'blood_type', 'gatq', 'household',
+            'student_type', 'student_identity', 'department', 'campus', 'profession', 'class', 'enrolment', 'cultivation_mode', 'degree', 'academic', 'registered_school_year', 'semester', 'graduation_type'];
+            for (let i of arr) {
+                getCode(i);
+            }
+        } else {
+            dialog.toast('很抱歉，用户登录信息已过期，请重新登录', 'error', 3000, function () {
+                localStorage.clear();
+                window.location = 'register_manager.html';
+            });
+        }
+    }(window, jQuery);
+
+    function validateBasicInfo(type) {
+        console.log("===========" + _studentId);
+        var item = localStorage.getItem("idCard");
+        if (item) {
+            $.ajax({
+                url: 'http://183.195.133.44:81' + '/app/getLocalStudentInfoByCard/' + item,
+                type: "POST",
+                dataType: "json",
+                async: false,
+                contentType:'application/json;charset=UTF-8',
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        if (ret.flag == 1) {
+                            localStorage.setItem("studentId", _studentId);
+                            window.location = type + '.html';
+                        } else if (ret.flag == -1) { //本地库不存在，则从远程库查bb找
+                            window.YDUI.dialog.toast('请先完善个人的基本信息', 'error', 3000, function () {
+                                window.location = 'bb.html';
+                            });
+                        }
+                    }
+                }
+            });
+        } else {
+            window.YDUI.dialog.toast('很抱歉，用户登录信息已过期，请重新登录', 'error', 3000, function () {
+                localStorage.clear();
+                window.location = 'register_manager.html';
+            });
+        }
+    }
+</script>
+</body>
+</html>

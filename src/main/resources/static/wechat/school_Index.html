@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=0">
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <title>上海科学技术职业学院-招生指南</title>
+    <style>
+
+        body{
+            font-family: 'Open Sans', arial, sans-serif;
+            margin-top: 3rem;
+            /*width: 100%;
+            height: 100%;
+            position: fixed;*/
+            z-index: -10;
+            background: url("../resources/path/build/images/index/shouye.png") no-repeat 0 0;
+            background-size:100% 100%;
+            background-attachment: fixed;
+        }
+        *{
+            margin:0;
+            padding:0;
+        }
+        header {
+            margin: 0 5%;
+        }
+        #categories{
+            overflow:hidden;
+            width:90%;
+            margin:0 auto;
+        }
+        .clr:after{
+            content:"";
+            display:block;
+            clear:both;
+        }
+        #categories li {
+            position:relative;
+            list-style-type:none;
+            width:27.85714285714286%; /* = (100-2.5) / 3.5 */
+            padding-bottom: 27.167601%; /* =  width /0.866 */
+            float:none;
+            overflow:hidden;
+            visibility:hidden;
+        }
+        #categories li#college_introduction {
+            width:108.857143%;
+        }
+
+        #categories li#look_college{
+            width:75.857143%; /* = (100-2.5) / 3.5 */
+        }
+        #categories li#enroiment_guide{
+            width:114.857143%; /* = (100-2.5) / 3.5 */
+        }
+        #categories li:nth-child(3n+2){
+            margin:0 1%;
+        }
+        #categories li:nth-child(6n+4){
+            margin-left:0.5%;
+        }
+        #categories li:nth-child(6n+4), #categories li:nth-child(6n+5), #categories li:nth-child(6n+6) {
+            margin-top: -6.9285714285%;
+            margin-bottom: -6.9285714285%;
+        }
+        #categories li:nth-child(6n+4):last-child, #categories li:nth-child(6n+5):last-child, #categories li:nth-child(6n+6):last-child{
+            margin-bottom:0%;
+        }
+        #categories li *{
+            position:absolute;
+            visibility:visible;
+        }
+        #categories li > div {
+            width:100%;
+            height:100%;
+            text-align:center;
+            color:#fff;
+            overflow:hidden;
+            -webkit-backface-visibility:hidden;
+        }
+
+        /* HEX CONTENT */
+        #categories li img {
+            left: -100%;
+            right: -100%;
+            width: auto;
+            height: 90%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <img src="../resources/path/build/images/index/logo.png" style="width: 100%;"/>
+</header>
+<ul  id="categories" class="clr">
+    <li id="college_introduction">
+        <div>
+            <img src="../resources/path/build/images/index/xyjj.png" id="introduce" alt=""  onclick="location.href='college_introduction.html';">
+        </div>
+    </li>
+    <li id="look_college">
+        <div>
+            <img src="../resources/path/build/images/index/ggxy.png" alt="" onclick="location.href= 'http://xsrx.scst.edu.cn:88/tour.html'"/>
+        </div>
+    </li>
+    <li id="enroiment_guide">
+        <div>
+            <img src="../resources/path/build/images/index/zszn.png" alt="" onclick="location.href='enrol_students.html';"/>
+        </div>
+    </li>
+</ul>
+<script src="../resources/path/build/js/jquery-3.1.1.min.js"></script>
+<!--<script>
+    !function () {
+        var token = localStorage.getItem("token");
+        if (!token) {
+            //调用api站点的登录接口,接口在登录成功后返回一个token。
+            var data  = {baName: "", baid: "", baidList: [], baids: "", bapName: "", bapid: "", bapidList: [], bapids: "", createId: "", createTime: "", email: "", id: "",loginName: "hxy", newPassWord: "", passWord: "a", phone: "", photo: "", remark: "", roleIdList: [], salt: "", status: "", updateId: "", updateTime: "", userName: ""};
+            var url = 'http://183.195.133.44:81/app/login/';
+            $.ajax({
+                url: url,
+                type : "post",
+                data: JSON.stringify(data),
+                dataType: 'json',//传递给请求处理程序或页面的,用以获得jsonp回调函数名的参数名(默认为callback)
+                contentType:'application/json;charset=UTF-8',
+                success: function (ret) {
+                    //为简单起见，将token保存在全局变量中。
+                    console.log(ret);
+                    localStorage.setItem("token", ret.token);
+                    localStorage.setItem("expire", ret.expire);
+                },
+                error: function (ret) {
+                    alert("服务器连接失败");
+                }
+            });
+        }
+    }();
+</script>-->
+<!--<script>
+    var xhr = new XMLHttpRequest();
+    var url ="http://localhost:8083/app/login/";
+    var data = JSON.stringify({"baName": "",
+        "baid": "",
+        "baidList": [],
+        "baids": "",
+        "bapName": "",
+        "bapid": "",
+        "bapidList": [],
+        "bapids": "",
+        "createId": "",
+        "createTime": "",
+        "email": "",
+        "id": "",
+        "loginName": "hxy",
+        "newPassWord": "",
+        "passWord": "a",
+        "phone": "",
+        "photo": "",
+        "remark": "",
+        "roleIdList": [],
+        "salt": "",
+        "status": "",
+        "updateId": "",
+        "updateTime": "",
+        "userName": ""
+    });
+
+    xhr.open("POST", url );
+    xhr.setRequestHeader('Content-Type','application/json');
+    xhr.onload = function(){
+        console.log(xhr.responseText) // 这里要用xhr.respnseText 获取数据，我经常给函数传一个data参数，获取数据，造成错误
+    };
+    xhr.send(data);
+</script>-->
+</body>
+</html>

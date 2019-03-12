@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>学院简介</title>
+    <meta content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/vue-ydui/dist/ydui.rem.css">
+    <!-- 引入rem自适应类库 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/build/css/ydui.css?rev=a4b9d6e8c9c1cae7ea4676f911682af7"/>
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/demo/css/demo.css"/>
+    <script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.flexible.js"></script>
+    <style>
+        .g-scrollview:after {
+            height: 0;
+        }
+        .slider-item img {
+            width: 100%;
+            height: -webkit-fill-available;
+            height: -moz-fill-available;
+            height: -moz-available;    /* FireFox目前这个生效 */
+            height: fill-available;
+        }
+    </style>
+</head>
+<body>
+<section class="g-flexview">
+
+    <!--<header class="m-navbar">
+        <a href="school_Index.html" class="navbar-item"><i class="back-ico"></i></a>
+        <div class="navbar-center"><span class="navbar-title">学院简介</span></div>
+    </header>-->
+
+    <section class="g-scrollview" id="J_List" style="overflow-y: -webkit-paged-y!important;"></section>
+</section>
+<script id="J_ListHtml" type="text/html">
+    <div class="m-slider" id="J_Slider">
+        <div class="slider-wrapper">
+            {{each list as data}}
+            <div class="slider-item">
+                <a href="javascript:void(0);">
+                    <img src="{{data.path}}" data-url="{{data.path}}" alt="{{data.name}}">
+                </a>
+            </div>
+            {{/each}}
+        </div>
+        <div class="slider-pagination"></div>
+    </div>
+
+</script>
+<!-- 引入组件库 -->
+<script src="../resources/path/build/js/fastclick.js"></script>
+<script src="../resources/path/build/js/jquery-3.1.1.min.js"></script>
+<script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.js"></script>
+<script src="../resources/path/build/js/template.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+    !function (win, $) {
+        var apiDomain = 'http://183.195.133.44:81';
+        var url = apiDomain + '/app/getImagesByTypes/' + '5';
+        var page = 1, size = 100;
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',//传递给请求处理程序或页面的,用以获得jsonp回调函数名的参数名(默认为callback)
+            success: function (ret) {
+                if (ret.code == 0) {
+                    console.log(ret.shResourcesUploadList);
+                    var html = template('J_ListHtml', {list: ret.shResourcesUploadList});
+                    $('#J_List').append(html).find('img').lazyLoad({binder: '#J_List'});
+                    $('#J_Slider').slider({
+                        speed: 300,
+                        autoplay: 8000,
+                        lazyLoad: false
+                    });
+                }
+            },
+            error: function (ret) {
+                alert("服务器连接失败");
+            }
+        });
+
+        /*// 根据实际情况自定义获取数据方法
+        var loadMore = function (callback) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+
+                dataType: 'json',//传递给请求处理程序或页面的,用以获得jsonp回调函数名的参数名(默认为callback)
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        console.log(ret.shResourcesUploadList);
+                        typeof callback == 'function' && callback(ret.shResourcesUploadList);
+                    }
+                },
+                error: function (ret) {
+                    alert("服务器连接失败");
+                }
+            });
+        };
+
+        $('#J_List').infiniteScroll({
+            binder: '#J_List',
+            pageSize: size,
+            initLoad: true,
+            loadingHtml: '<img src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>',
+            loadListFn: function () {
+                var def = $.Deferred();
+                loadMore(function (listArr) {
+                    var html = template('J_ListHtml', {list: listArr});
+                    $('#J_ListContent').append(html).find('img').lazyLoad({binder: '#J_List'});
+                    def.resolve(listArr);
+                });
+                return def.promise();
+            }
+        });*/
+    }(window, jQuery);
+</script>
+<!--<script>
+    !function () {
+        var token = localStorage.getItem("token");
+        if (!token) {
+            alert("请先登录");
+        }
+        console.log(token);
+        var url = 'http://localhost:8083/app/getImagesByType';
+        var page = 1, size = 100;
+        // 根据实际情况自定义获取数据方法
+        var loadMore = function (callback) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                headers: { "Authorization": token},  //通过请求头来发送token，放弃了通过cookie的发送方式
+                data: { type:'5' },
+                async: false,
+                dataType: 'json',//传递给请求处理程序或页面的,用以获得jsonp回调函数名的参数名(默认为callback)
+                contentType:'application/json;charset=UTF-8', //$.ajax contenType是appliation/json的时候，spring mvc后台无法接受data参数
+                /*beforeSend: function (request) {
+                 request.setRequestHeader("Authorization", token); //通过请求头来发送token，放弃了通过cookie的发送方式
+                 },*/
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        console.log(ret.shResourcesUploadList);
+                        typeof callback == 'function' && callback(ret.shResourcesUploadList);
+                    }
+                },
+                error: function (ret) {
+                    alert("服务器连接失败");
+                }
+            });
+        };
+
+        $('#J_List').infiniteScroll({
+            binder: '#J_List',
+            pageSize: size,
+            initLoad: true,
+            loadingHtml: '<img src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>',
+            loadListFn: function () {
+                var def = $.Deferred();
+                loadMore(function (listArr) {
+                    var html = template('J_ListHtml', {list: listArr});
+                     $('#J_ListContent').append(html).find('img').lazyLoad({binder: '#J_List'});
+                     def.resolve(listArr);
+                });
+                return def.promise();
+            }
+        });
+    }();
+</script>-->
+<!--<script>
+    var token = localStorage.getItem("token");
+    if (!token) {
+        alert("请先登录");
+    }
+    console.log(token);
+    var url = 'http://localhost:8083/app/getImagesByType';
+    $.ajax({
+        url: url,
+        type: 'GET',
+        headers: { "Authorization": token},
+        data: { type:'5' },
+        async: false,
+        dataType: 'json',//传递给请求处理程序或页面的,用以获得jsonp回调函数名的参数名(默认为callback)
+        contentType:'application/json;charset=UTF-8',
+        /*beforeSend: function (request) {
+            request.setRequestHeader("Authorization", token); //通过请求头来发送token，放弃了通过cookie的发送方式
+        },*/
+        success: function (ret) {
+            if (ret.code == 0) {
+                ret.shResourcesUploadList;
+            }
+        },
+        error: function (ret) {
+            alert("服务器连接失败");
+        }
+    });
+</script>-->
+</body>
+</html>

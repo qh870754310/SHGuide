@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"   content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>首页</title>
+    <style>
+        #scene {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            z-index: -10;
+            background-image: url(../path/build/images/index/首页.png);
+            background-repeat: no-repeat;
+            background-position: 0px 0px;
+            background-size: 100% 100%;
+        }
+        header img {
+            width: 90%!important;
+            margin: 0 5%;
+        }
+        .menu {
+            width: 90%;
+            margin: 0 5%;
+        }
+        .menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto;
+            display: table;
+        }
+        .menu ul li {
+            position: relative;
+            padding: 7px 10px;
+            white-space: nowrap;
+        }
+        #college_introduction, #look_college, #enroiment_guide li a {
+            float: none;
+        }
+        #college_introduction img {
+            margin: 0 12%;
+            display: block;
+        }
+        #look_college img {
+            margin: 0 -20%;
+            display: block;
+        }
+        #enroiment_guide img {
+            margin: 0 25%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div id="scene">
+    <header>
+        <img src="../path/build/images/index/logo.png" style="width: 100%;"/>
+    </header>
+    <div class="menu">
+        <ul>
+            <li class="hexagon dropdown" id="college_introduction">
+                <a href="#">
+                    <img src="../path/build/images/index/学院简介.png"/>
+                </a>
+            </li>
+            <li class="hexagon dropdown" id="look_college">
+                <a href="#">
+                    <img src="../path/build/images/index/逛逛学院.png" />
+                </a>
+            </li>
+            <li class="hexagon dropdown" id="enroiment_guide">
+                <a href="#">
+                    <img src="../path/build/images/index/招生指南.png" />
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<script>
+    (function(){
+        //设置背景图片高度
+        ("#scene").height($("#scene").height());
+    });
+</script>
+</body>
+</html>

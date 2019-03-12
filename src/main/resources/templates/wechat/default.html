@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>上海科学技术职业学院全景系统</title>
+    <script th:inline="javascript">
+        var bindState = [[${bindState}]];
+        localStorage.setItem('openId', [[${openId}]]);
+        localStorage.setItem('apiDomain', [[${apiDomain}]]);
+        if (bindState) {
+            localStorage.setItem('userId', [[${userId}]]);
+            location = '/wechat/index.html';
+        } else {
+            location = '/wechat/login.html';
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

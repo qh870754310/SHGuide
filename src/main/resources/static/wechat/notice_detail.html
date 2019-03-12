@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <!-- 引入YDUI样式 -->
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/build/css/ydui.css" />
+    <link rel="stylesheet" href="../resources/path/build/plugins/ydui-0.1.3/demo/css/demo.css" />
+    <!-- 引入YDUI自适应解决方案类库 -->
+    <script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.flexible.js"></script>
+</head>
+<body>
+<section class="g-flexview">
+    <header class="m-navbar">
+        <a href="notice.html" class="navbar-item"><i class="back-ico"></i></a>
+        <div class="navbar-center"><span class="navbar-title">通知公告</span></div>
+    </header>
+    <div class="g-scrollview">
+        <div class="m-list list-theme4" id="J_ListContent"></div>
+    </div>
+</section>
+
+<!-- 引入jQuery 2.0+ -->
+<script src="../resources/path/build/js/jquery-3.1.1.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../resources/path/build/plugins/ydui-0.1.3/build/js/ydui.js"></script>
+<!-- 引入template脚本 -->
+<script src="../resources/path/build/js/template.js"></script>
+<!-- 解决移动端浏览器300ms延迟 -->
+<script src="../resources/path/build/js/fastclick.js" type='application/javascript'></script>
+<script id="J_ListHtml" type="text/html">
+    {{if isAdmin}}
+    <div class="list-item">
+        <div class="list-mes">
+            <h2 style="text-align: center; font-size: 16px">{{list.title}}</h2>
+            <div class="list-mes-item">
+                <div style="width: 100%; margin: 0 auto; text-align: center;padding: 5px">
+                    {{list.createdate}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <article class="m-list list-theme5">
+        <a href="javascript:void(0);" class="list-item">
+            <!--<div class="m-slider" id="J_Slider">
+                <div class="slider-wrapper">
+                    {{each modelName as value i}}
+                    <div class="slider-item">
+                        <a href="javascript:void(0);">
+                            <img src="{{value}}" data-url="{{value}}">
+                        </a>
+                    </div>
+                    {{/each}}
+                </div>
+                <div class="slider-pagination"></div>
+            </div>-->
+
+            <div class="list-mes">
+                <div class="list-mes-item">
+                    <div class="list-item" style="font-size: 14px" id="content">
+                        {{list.content}}
+                    </div>
+                </div>
+            </div>
+        </a>
+    </article>
+    {{/if}}
+</script>
+<script>
+    /*var apiDomain = localStorage.getItem('apiDomain');*/
+//    var apiDomain = 'http://localhost:81';
+    var apiDomain = 'http://183.195.133.44:81';
+    var url = apiDomain + '/app/info/' + localStorage.getItem("notice_id");
+
+    $(function() {
+        FastClick.attach(document.body);
+    });
+
+    !function (win, $) {
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            success: function (ret) {
+                console.log(ret);
+                if (ret.code == 0) {
+                    if (ret.shNotice != null) {
+                        let allStr = ret.shNotice.content;
+                        var imgReg = /<img.*?(?:>|\/>)/gi;
+                        //匹配src属性
+                        var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+                        var arr = allStr.match(imgReg);
+                        let imgSrc = [];
+                        if(arr) {
+                            for (var i = 0; i < arr.length; i++) {
+                                imgSrc[i] = arr[i].match(srcReg)[1];
+                            }
+                        } else {
+                            imgSrc = ['../resources/path/build/images/默认.png']
+                        }
+                        var data = {
+                            isAdmin: true,
+                            list: ret.shNotice,
+                            modelName: imgSrc
+                        };
+                        $('#J_ListContent').prepend(template('J_ListHtml', data));
+                        $('#content').html($('#content').text());
+                        $('#J_Slider').slider({
+                            speed: 300,
+                            autoplay: 8000,
+                            lazyLoad: false
+                        });
+                    }
+                }
+            }
+        });
+    }(window, jQuery);
+</script>
+</body>
+</html>
